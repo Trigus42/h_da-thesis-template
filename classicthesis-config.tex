@@ -189,6 +189,11 @@
 %\PassOptionsToPackage{pdftex}{graphicx} %%%IVO: driver will be chosen automatically
   \usepackage{graphicx}
 
+% Move glossaries here after hyperref
+\PassOptionsToPackage{toc,acronym,style=index}{glossaries}
+  \usepackage{glossaries}
+  \makeglossaries
+  \input{GlossaryEntries}
 
 % ********************************************************************
 % Hyperreferences

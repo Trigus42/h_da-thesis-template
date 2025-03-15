@@ -1,0 +1,16 @@
+%*******************************************************
+% Glossary
+%*******************************************************
+\automark[section]{chapter}
+\renewcommand{\chaptermark}[1]{\markboth{\spacedlowsmallcaps{#1}}{\spacedlowsmallcaps{#1}}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\enspace\spacedlowsmallcaps{#1}}}
+\refstepcounter{dummy}
+\pdfbookmark[0]{Glossar}{glossar}
+\markboth{\spacedlowsmallcaps{Glossar}}{\spacedlowsmallcaps{Glossar}}
+\chapter*{Glossar}
+
+% Configure glossary to not add to TOC and not create a chapter/section header
+\renewcommand{\glossarysection}[2][]{}
+\printglossary[title={}]
+
+\cleardoublepage
