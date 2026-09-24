@@ -26,9 +26,28 @@ This LaTeX-template might be used to write a bachelor or master thesis at the Co
 * [Known issues](#known-issues)
 * [License](#license)
 
+## Repository Structure
+
+All LaTeX sources live under `src/`. The build writes intermediate files to `out/` and copies the finished `thesis.pdf` to the repository root.
+
+```text
+Makefile                     # Build automation (drives latexmk)
+container/Dockerfile         # LaTeX toolchain image (Dev Container + CI)
+.devcontainer/               # VS Code / Codespaces Dev Container config
+src/
+  thesis.tex                 # Main document (structure, includes, language)
+  .latexmkrc                 # latexmk config (glossaries)
+  bib/bibliography.bib       # Bibliography
+  chapters/                  # Content chapters and appendices
+  config/                    # classicthesis/hdathesis .sty + -config.tex files
+  definitions/               # GlossaryEntries.tex
+  frontbackmatter/           # Title page, abstracts, TOC, declarations, etc.
+  gfx/                       # Images & figures
+```
+
 ## Configuration
 
-The LaTeX template can be modified and configured easily using a very limited number of files, namely _classicthesis-config.tex_, _hdathesis-config.tex_, and _thesis.tex_. Only use these three files to modify your LaTeX thesis. Please _DO NOT_ modify the actual LaTeX code for your thesis (as this becomes quite complex and consumes a lot of time). 
+The LaTeX template can be modified and configured easily using a very limited number of files, namely _src/config/classicthesis-config.tex_, _src/config/hdathesis-config.tex_, and _src/thesis.tex_. Only use these three files to modify your LaTeX thesis. Please _DO NOT_ modify the actual LaTeX code for your thesis (as this becomes quite complex and consumes a lot of time). 
 Please find a brief description of the various configuration options below:
 
 ### thesis.tex
@@ -51,13 +70,13 @@ You may also adapt the paper size (_paper=a4_) and the font size (_fontsize=11_)
 
 ##### Bibliographies
 
-By default all bibliographies that can be referenced in the thesis are put into the _bibliography.bib_ file in the root directory of the LaTeX sources. However, if you want to use additional bibliography files, you may add them to the bibliograph section (starting at line 47) in _thesis.tex_
+By default all bibliographies that can be referenced in the thesis are put into the _src/bib/bibliography.bib_ file. However, if you want to use additional bibliography files, you may add them to the bibliograph section in _src/thesis.tex_
 
 ```
 %*************************************************************************
 % Bibliographies
 %*************************************************************************
-\addbibresource{bibliography.bib}
+\addbibresource{bib/bibliography.bib}
 .... ADD YOUR FILES HERE ...
 ```
 

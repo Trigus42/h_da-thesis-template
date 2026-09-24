@@ -3,11 +3,12 @@ VERSION = v4.4
 NAME    = Max
 SURNAME = Mustermann
 
+SOURCE_DIR = src
 BUILD_DIR = out
 
 all:
 	@mkdir -p $(BUILD_DIR)
-	@latexmk -pdf -outdir=$(BUILD_DIR) -interaction=nonstopmode -halt-on-error $(MASTER)
+	@cd $(SOURCE_DIR) && TEXINPUTS=.:config//: latexmk -pdf -outdir=../$(BUILD_DIR) -interaction=nonstopmode -halt-on-error $(MASTER)
 	@cp $(BUILD_DIR)/$(MASTER).pdf $(MASTER).pdf
 
 # Full build; kept as a separate target so CI can call `make test`.
@@ -18,7 +19,7 @@ publish: all
 	@mv $(MASTER)-prepress.pdf $(MASTER).pdf
 
 clean:
-	@latexmk -outdir=$(BUILD_DIR) -C $(MASTER) 2>/dev/null || true
+	@cd $(SOURCE_DIR) && latexmk -outdir=../$(BUILD_DIR) -C $(MASTER) 2>/dev/null || true
 	@rm -rf $(BUILD_DIR)
 
 cleanall: clean
