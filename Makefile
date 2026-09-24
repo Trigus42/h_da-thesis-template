@@ -3,27 +3,26 @@ VERSION = v4.4
 NAME    = Max
 SURNAME = Mustermann
 
-all: clean
-	@pdflatex ${MASTER}.tex
-	@test -f ${MASTER}-blx.bib && ( bibtex ${MASTER}; pdflatex ${MASTER}.tex ) || echo "No Bibtex"
-	@pdflatex ${MASTER}.tex
+BUILD_DIR = out
+
+all:
+	@mkdir -p $(BUILD_DIR)
+	@latexmk -pdf -outdir=$(BUILD_DIR) -interaction=nonstopmode -halt-on-error $(MASTER)
+	@cp $(BUILD_DIR)/$(MASTER).pdf $(MASTER).pdf
+
+# Full build; kept as a separate target so CI can call `make test`.
+test: all
 
 publish: all
-	@ps2pdf14 -dPDFSETTINGS=/prepress ${MASTER}.pdf
-	@mv ${MASTER}.pdf.pdf ${MASTER}.pdf
+	@ps2pdf14 -dPDFSETTINGS=/prepress $(MASTER).pdf $(MASTER)-prepress.pdf
+	@mv $(MASTER)-prepress.pdf $(MASTER).pdf
 
 clean:
-	@rm -rf *run.xml *-blx.bib *.aux *.bbl *.blg *.brf *.log *.lof *.lot *.lol *.out *.tcp *.toc *.tps *.bak *.backup *.pdfsync *.synctex.gz *.*~
-	@for i in run.xml -blx.bib aux bbl blg brf log lof lot lol out tcp toc tps bak backup pdfsync synctex.gz; do find . -name *.$$i -exec rm -f {} + ; done
-	@find . -name *.*~ -exec rm -f {} +
+	@latexmk -outdir=$(BUILD_DIR) -C $(MASTER) 2>/dev/null || true
+	@rm -rf $(BUILD_DIR)
 
 cleanall: clean
-	@rm *.pdf
-
-test: clean
-	@pdflatex -interaction=nonstopmode -halt-on-error ${MASTER}.tex
-	@test -f ${MASTER}-blx.bib && ( bibtex ${MASTER}; pdflatex ${MASTER}.tex ) || echo "No Bibtex" 
-	@pdflatex ${MASTER}.tex
+	@rm -f $(MASTER).pdf
 
 bz2: clean
 	@echo 'creating package including Docs'

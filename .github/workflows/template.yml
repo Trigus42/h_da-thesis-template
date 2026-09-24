@@ -4,11 +4,11 @@ name: template
 
 jobs:
   test-latex-template:
-    runs-on: ubuntu-22.04
-    name: Test LaTeX Template 
-    steps: 
-      - uses: actions/checkout@v2
-      - name: Build
-        run: |
-          docker pull mbredel/thesis-template:latest
-          docker run --rm --volume $(pwd):/thesis-template/ --workdir /thesis-template mbredel/thesis-template:latest
+    runs-on: ubuntu-latest
+    name: Test LaTeX Template
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build container image
+        run: docker build --tag thesis-template --file container/Dockerfile container
+      - name: Build thesis
+        run: docker run --rm --volume "$(pwd)":/workspace thesis-template make test

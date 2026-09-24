@@ -21,6 +21,7 @@ This LaTeX-template might be used to write a bachelor or master thesis at the Co
   * [Adding content](#adding-content "Adding chapters to the thesis")
   * [Changing the Citation Style](#changing-the-citation-style "Changing the citation style from IEEE Numeric to IEEE Alphabetic")
   * [Compiling the LaTeX source code](#compiling-the-latex-source-code)
+  * [Dev Container](#dev-container "Using the VS Code / Codespaces Dev Container")
   * [Using Docker](#using-docker "Using Docker for compiling the LaTeX code")
 * [Known issues](#known-issues)
 * [License](#license)
@@ -173,19 +174,19 @@ However, if you prefer to uses the old IEEE Numeric style for citations you can 
 
 ### Compiling the LaTeX source code
 
-You may compile the hda-thesis template using the ```pdflatex``` and the ```bibtex``` command. In addition, the thesis template repository contains a Makefile that allows you to compile the thesis template using the _make_ tool available on most Unix and Linux systems. Simply type:
+The thesis template repository contains a Makefile that drives [`latexmk`](https://ctan.org/pkg/latexmk), which automatically runs `pdflatex`, `biber`, and the glossary tools as often as needed to resolve all references. It requires the _make_ tool available on most Unix and Linux systems. Simply type:
 
 ```
  $ make
 ```
 
-to compile the LaTeX code into a PDF-file. Moreover, you may use
+to compile the LaTeX code. All intermediate files are written to the `out/` directory, and the finished `thesis.pdf` is copied to the repository root. Moreover, you may use
 
 ```
  $ make clean
 ```
 
-to remove all temporary files, which are produced during the compilation process. Finally,
+to remove the `out/` directory and all temporary files produced during compilation. Finally,
 
 ```
  $ make bz2
@@ -197,23 +198,33 @@ generates a bz2-package file, which contains all the source files of your LaTeX 
  $ make publish
 ```
 
+### Dev Container
+
+The recommended way to write and build the thesis is the pre-configured **Dev Container** (VS Code or GitHub Codespaces). It comes with TeX Live, `latexmk`, `biber`, `ghostscript`, `chktex`, and the LaTeX Workshop extension already installed and configured, so you do not need to install anything locally.
+
+1. Open the project in VS Code with the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) (or open the repository in GitHub Codespaces).
+2. Click **Reopen in Container** when prompted.
+3. Run `make` in the integrated terminal to build `thesis.pdf`.
+
+The container definition lives in [`.devcontainer/devcontainer.json`](.devcontainer/devcontainer.json) and [`container/Dockerfile`](container/Dockerfile). Edit those files to add TeX packages or tooling.
+
 ### Using Docker
 
-The h_da thesis template ships with two Dockerfiles that create [Docker](https://www.docker.com) container used to compile the LaTeX code. One container - built by the [Dockerfile.ci]( https://github.com/mbredel/thesis-template/blob/master/Dockerfile.ci) Docker file - is used by the CI to compile the thesis template and check its integrity at every commit. The other one - created by the [Dockerfile.local](https://github.com/mbredel/thesis-template/blob/master/Dockerfile.local) Docker file - might be used to build the Docker container that allows to compile the LaTeX code on your local machine without the need to install any LaTeX files.
+If you prefer not to use the Dev Container but still want to build inside Docker (e.g. on a CI runner), the template ships a single [`container/Dockerfile`](container/Dockerfile) with the complete LaTeX toolchain. It is the same image the Dev Container and the CI workflow use.
 
 In order to build the Docker image you have to type the following command:
 
 ```
- $ docker build --tag mbredel/thesis-template --file Dockerfile.local .
+ $ docker build --tag thesis-template --file container/Dockerfile container
 ```
 
-Creating the image requires a working (and hopefully fast) Internet connection. It may take several minutes to download the required base-images as well as all needed dependencies. You only have to create the image once. Once the image is created, you can run the Docker container by running the following command
+Creating the image requires a working (and hopefully fast) Internet connection. It may take several minutes to download the required base-images as well as all needed dependencies. You only have to create the image once. Once the image is created, you can compile the thesis by running
 
 ```
- $ docker run --volume "$(pwd)":/thesis-template/ mbredel/thesis-template && docker rm $(docker ps -lq)
- ```
+ $ docker run --rm --volume "$(pwd)":/workspace thesis-template make
+```
 
-inside the root directory containing the LaTeX code. The command mounts the current directory into the Docker container, runs the "publish" make target, and thus compiles the LaTeX code into a PDF file. Finally, the command removes the container again, as it is not needed anymore. You may re-compile the LaTeX code by re-running the "docker run ..." command again.
+inside the root directory containing the LaTeX code. The command mounts the current directory into the Docker container, runs the default `make` target, and thus compiles the LaTeX code into a PDF file. The `--rm` flag removes the container again once it exits. You may re-compile the LaTeX code by re-running the "docker run ..." command again.
 
 For more information on Docker, please take a look at the [Docker documentation](https://docs.docker.com/).
 

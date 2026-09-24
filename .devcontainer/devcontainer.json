@@ -1,0 +1,136 @@
+{
+	"name": "LaTeX Development Environment",
+	"build": {
+		"dockerfile": "../container/Dockerfile",
+		"context": "../container"
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				// LaTeX Extensions
+				"james-yu.latex-workshop",
+				"tecosaur.latex-utilities",
+				"valentjn.vscode-ltex",
+				"simonsiefke.svg-preview",
+
+				// General Productivity Extensions
+				"naumovs.color-highlight",
+				"alefragnani.Bookmarks",
+				"oderwat.indent-rainbow",
+				"yzhang.markdown-all-in-one",
+				"eamodio.gitlens",
+				"mhutchie.git-graph",
+				"gruntfuggly.todo-tree",
+				"shardulm94.trailing-spaces"
+			],
+			"settings": {
+				// General Editor Settings
+				"editor.formatOnSave": false,
+				"editor.wordWrap": "on",
+				"files.eol": "\n",
+				"files.autoSave": "onFocusChange",
+				"terminal.integrated.defaultProfile.linux": "zsh",
+
+				// File Explorer Settings - LaTeX exclusions
+				"files.exclude": {
+					// Bibliography related
+					"**/*.bbl": true,
+					"**/*.blg": true,
+					"**/*-blx.bib": true,
+					"**/*.run.xml": true,
+
+					// Table of contents, figures, tables
+					"**/*.toc": true,
+					"**/*.lof": true,
+					"**/*.lot": true,
+					"**/*.lol": true,
+
+					// Indices, glossaries, acronyms
+					"**/*.idx": true,
+					"**/*.ind": true,
+					"**/*.ilg": true,
+					"**/*.glo": true,
+					"**/*.gls": true,
+					"**/*.glg": true,
+					"**/*.acn": true,
+					"**/*.acr": true,
+					"**/*.alg": true,
+					"**/*.ist": true,
+
+					// Cross-references and hyperref
+					"**/*.aux": true,
+					"**/*.out": true,
+
+					// Build and compilation files
+					"**/*.log": true,
+					"**/*.fls": true,
+					"**/*.fdb_latexmk": true,
+					"**/*.synctex.gz": true,
+					"**/*.synctex(busy)": true,
+					"**/*.dvi": true,
+					"**/*-converted-to.*": true,
+
+					// Beamer
+					"**/*.nav": true,
+					"**/*.snm": true,
+					"**/*.vrb": true
+				},
+
+				// LaTeX Workshop Core Settings
+				"latex-workshop.latex.recipes": [
+					{
+						"name": "make",
+						"tools": [
+							"make"
+						]
+					}
+				],
+				"latex-workshop.latex.tools": [
+					{
+						"name": "make",
+						"command": "make",
+						"args": [
+							"publish"
+						],
+						"env": {}
+					}
+				],
+
+				// LaTeX Workshop Linting
+				"latex-workshop.linting.chktex.enabled": true,
+				"latex-workshop.linting.chktex.exec.path": "chktex",
+
+				// LaTeX Workshop Cleaning
+				"latex-workshop.latex.clean.subfolder.enabled": true,
+				"latex-workshop.latex.autoClean.run": "onBuilt",
+
+				// Language-specific Settings
+				"[latex]": {
+					"editor.formatOnPaste": false,
+					"editor.wordWrap": "on",
+					"editor.fontSize": 14,
+					"editor.suggestSelection": "recentlyUsedByPrefix",
+					"rewrap.autoWrap.enabled": true
+				},
+
+				// Other Extensions Settings
+				"ltex.java.path": "/usr/lib/jvm/default-java"
+			}
+		}
+	},
+	"forwardPorts": [],
+	"postCreateCommand": "echo 'LaTeX Development Environment is ready!'",
+	"remoteUser": "vscode",
+	"features": {
+		"ghcr.io/devcontainers/features/common-utils:2": {
+			"installZsh": "true",
+			"configureZshAsDefaultShell": "true",
+			"username": "vscode",
+			"upgradePackages": "true"
+		},
+		"ghcr.io/devcontainers/features/git-lfs:1": {}
+	},
+	"mounts": [
+		"source=${localEnv:HOME}/.config/git,target=/home/vscode/.config/git,type=bind,readonly,consistency=cached"
+	]
+}
