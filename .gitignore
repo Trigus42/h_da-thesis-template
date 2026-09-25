@@ -20,6 +20,7 @@
 # *.pdf
 
 thesis.pdf
+chapters/recommendations/recommendations.pdf
 
 # latexmk out-of-tree build directory
 out/
