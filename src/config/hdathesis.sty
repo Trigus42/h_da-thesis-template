@@ -65,26 +65,21 @@
 %*******************************************************************************
 % Double spacing between lines 
 %*******************************************************************************
-\ifthenelse{\boolean{@doublespacing}}{%
+\if@doublespacing
     \RequirePackage[]{setspace}
-    }
-  {\relax}
+\fi
 
 %*******************************************************************************
 % Acronyms - TODO: english version 
 %*******************************************************************************
-\ifthenelse{\boolean{@abbrev}}%
-{%
+\if@abbrev
     \RequirePackage[intoc]{nomencl}
     \let\abbrev\nomenclature
     \renewcommand{\nomname}{Abkürzungsverzeichnis}
     \setlength{\nomlabelwidth}{.25\hsize}
     \renewcommand{\nomlabel}[1]{#1 \dotfill}
     \setlength{\nomitemsep}{-\parsep}
-}%
-{%
-    \relax
-}%
+\fi
 
 %*******************************************************************************
 % Tabularx - Spalten 
@@ -97,10 +92,10 @@
 %*******************************************************************************
 % Indices
 %*******************************************************************************
-\ifthenelse{\boolean{@index}}{%
+\if@index
     \RequirePackage{makeidx}%
-    \newcommand{\Index}[1]{#1\index{#1}}}
-  {\relax}
+    \newcommand{\Index}[1]{#1\index{#1}}
+\fi
 
 %*******************************************************************************
 % Colors 
