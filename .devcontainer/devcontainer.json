@@ -129,8 +129,5 @@
 			"upgradePackages": "true"
 		},
 		"ghcr.io/devcontainers/features/git-lfs:1": {}
-	},
-	"mounts": [
-		"source=${localEnv:HOME}/.config/git,target=/home/vscode/.config/git,type=bind,readonly,consistency=cached"
-	]
+	}
 }
