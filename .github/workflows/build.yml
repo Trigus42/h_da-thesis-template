@@ -75,7 +75,7 @@ jobs:
       - name: Build
         env:
           IMAGE: ${{ steps.filter.outputs.container == 'true' && fromJSON(steps.meta.outputs.json).tags[0] || format('{0}/{1}:latest', env.REGISTRY, steps.lower.outputs.image_name) }}
-        run: docker run --rm --volume "$GITHUB_WORKSPACE:/workspace" "$IMAGE" make
+        run: docker run --rm --user root --volume "$GITHUB_WORKSPACE:/workspace" "$IMAGE" make
 
       - name: Upload
         uses: actions/upload-artifact@v5
