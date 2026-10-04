@@ -11,19 +11,26 @@ all:
 	@cd $(SOURCE_DIR) && TEXINPUTS=.:config//: latexmk -pdf -outdir=../$(BUILD_DIR) -interaction=nonstopmode -halt-on-error $(MASTER)
 	@cp $(BUILD_DIR)/$(MASTER).pdf $(MASTER).pdf
 
-# Full build; kept as a separate target so CI can call `make test`.
-test: all
+help:
+	@echo "Available targets:"
+	@echo "  all       - Build the thesis (default)"
+	@echo "  clean     - Remove build artifacts"
+	@echo "  cleanall  - Remove build artifacts and the final PDF"
+	@echo "  publish   - Build and compress the PDF for publication"
+	@echo "  test      - Build the thesis for CI"
+	@echo "  bz2       - Create a tarball of the project"
 
 publish: all
 	@ps2pdf14 -dPDFSETTINGS=/prepress $(MASTER).pdf $(MASTER)-prepress.pdf
 	@mv $(MASTER)-prepress.pdf $(MASTER).pdf
 
 clean:
-	@cd $(SOURCE_DIR) && latexmk -outdir=../$(BUILD_DIR) -C $(MASTER) 2>/dev/null || true
 	@rm -rf $(BUILD_DIR)
 
 cleanall: clean
 	@rm -f $(MASTER).pdf
+
+test: all
 
 bz2: clean
 	@echo 'creating package including Docs'
