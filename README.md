@@ -2,10 +2,31 @@
 
 # A thesis LaTeX-template
 
-This LaTeX-template might be used to write a bachelor or master thesis at the Computer Science department at [h_da University of Applied Sciences](https://www.fbi.h-da.de/fbi.html "Hochschule Darmstadt, University of Applied Sciences") in Darmstadt. It is based on the fabulous ClassicThesis style template of [Andre Miedé](http://www.miede.de/ "Prof. Dr. Andre Miedé"). It is adapted to the current style guide for bachelor and master theses in the computer science department of h_da, as outlined in [Empfehlungen zur Erstellung wissenschaftlicher Abschlussarbeiten](https://fbi.h-da.de/fileadmin/Group_Dekanat/Dokumente/Studium/Group_Bachelor-Koordinator/BSc/empfehlungen_zu_abschlussarbeiten.pdf)
+This LaTeX-template is a fork of [mbredel/thesis-template](https://github.com/mbredel/thesis-template) and is adapted for personal use.
+
+> [!IMPORTANT]
+> **No Support** — This fork is built and maintained strictly for my personal work. It is shared in case it is useful to others, but I do not offer technical support, troubleshooting, or feature maintenance.
+
+## Quick Start
+
+The recommended setup is the included Dev Container, which provides TeX Live and all required build tools:
+
+1. Open the project in VS Code with the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote-containers), or open it in GitHub Codespaces.
+2. Select **Reopen in Container** when prompted.
+3. Build the thesis from the integrated terminal:
+
+```sh
+make
+```
+
+The build stores intermediate files in `out/` and writes the finished document to `thesis.pdf` in the repository root. Run `make help` to list the other available targets.
+
+To build without a Dev Container, install `make`, TeX Live, `latexmk`, `biber`, and the required LaTeX packages, then run the same command. See [Using Docker](#using-docker) for a standalone container workflow.
 
 ## Table of contents
 
+* [Quick Start](#quick-start)
+* [Repository Structure](#repository-structure)
 * [Configuration](#configuration)
   * [thesis.tex](#thesistex "Configuration options in the thesis.tex file")
     * [Two-sided vs. one-sided](#two-sided-vs-one-sided)
@@ -20,8 +41,6 @@ This LaTeX-template might be used to write a bachelor or master thesis at the Co
   * [Writing abstracts](#writing-abstracts "Adding abstracts to the thesis")
   * [Adding content](#adding-content "Adding chapters to the thesis")
   * [Changing the Citation Style](#changing-the-citation-style "Changing the citation style from IEEE Numeric to IEEE Alphabetic")
-  * [Compiling the LaTeX source code](#compiling-the-latex-source-code)
-  * [Dev Container](#dev-container "Using the VS Code / Codespaces Dev Container")
   * [Using Docker](#using-docker "Using Docker for compiling the LaTeX code")
 * [Known issues](#known-issues)
 * [License](#license)
@@ -47,7 +66,7 @@ src/
 
 ## Configuration
 
-The LaTeX template can be modified and configured easily using a very limited number of files, namely _src/config/classicthesis-config.tex_, _src/config/hdathesis-config.tex_, and _src/thesis.tex_. Only use these three files to modify your LaTeX thesis. Please _DO NOT_ modify the actual LaTeX code for your thesis (as this becomes quite complex and consumes a lot of time). 
+The LaTeX template can be modified and configured easily using a very limited number of files, namely _src/config/classicthesis-config.tex_, _src/config/hdathesis-config.tex_, and _src/thesis.tex_. Only use these three files to modify your LaTeX thesis. Please _DO NOT_ modify the actual LaTeX code for your thesis (as this becomes quite complex and consumes a lot of time).
 Please find a brief description of the various configuration options below:
 
 ### thesis.tex
@@ -64,7 +83,7 @@ The default output of the LaTeX thesis template is a single-sided style that als
                 BCOR=5mm,paper=a4,fontsize=11pt,%
                 ngerman,american,%lockflag%
                 ]{scrreprt}
-``` 
+```
 
 You may also adapt the paper size (_paper=a4_) and the font size (_fontsize=11_) if necessary.
 
@@ -191,42 +210,6 @@ However, if you prefer to uses the old IEEE Numeric style for citations you can 
 ```
 
 
-### Compiling the LaTeX source code
-
-The thesis template repository contains a Makefile that drives [`latexmk`](https://ctan.org/pkg/latexmk), which automatically runs `pdflatex`, `biber`, and the glossary tools as often as needed to resolve all references. It requires the _make_ tool available on most Unix and Linux systems. Simply type:
-
-```
- $ make
-```
-
-to compile the LaTeX code. All intermediate files are written to the `out/` directory, and the finished `thesis.pdf` is copied to the repository root. Moreover, you may use
-
-```
- $ make clean
-```
-
-to remove the `out/` directory and all temporary files produced during compilation. Finally,
-
-```
- $ make bz2
-```
-
-generates a bz2-package file, which contains all the source files of your LaTeX code. In case you need to create a PDF-version with embedded fonts you may use
-
-```
- $ make publish
-```
-
-### Dev Container
-
-The recommended way to write and build the thesis is the pre-configured **Dev Container** (VS Code or GitHub Codespaces). It comes with TeX Live, `latexmk`, `biber`, `ghostscript`, `chktex`, and the LaTeX Workshop extension already installed and configured, so you do not need to install anything locally.
-
-1. Open the project in VS Code with the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) (or open the repository in GitHub Codespaces).
-2. Click **Reopen in Container** when prompted.
-3. Run `make` in the integrated terminal to build `thesis.pdf`.
-
-The container definition lives in [`.devcontainer/devcontainer.json`](.devcontainer/devcontainer.json) and [`container/Dockerfile`](container/Dockerfile). Edit those files to add TeX packages or tooling.
-
 ### Using Docker
 
 If you prefer not to use the Dev Container but still want to build inside Docker (e.g. on a CI runner), the template ships a single [`container/Dockerfile`](container/Dockerfile) with the complete LaTeX toolchain. It is the same image the Dev Container and the CI workflow use.
@@ -260,4 +243,4 @@ The h_da computer science department LaTeX thesis template is licenced under GPL
 
 ## Acknowledgements
 
-* Many thanks to Sebastian Jung for his hints on the local Docker approach for compiling the LaTeX code. 
+* Many thanks to Sebastian Jung for his hints on the local Docker approach for compiling the LaTeX code.
